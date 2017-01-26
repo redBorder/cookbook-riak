@@ -9,7 +9,7 @@ attribute :group, :kind_of => String, :default => "riak"
 attribute :config_dir, :kind_of => String, :default => "/etc/riak-cs"
 attribute :logdir, :kind_of => String, :default => "/var/log/riak-cs"
 attribute :s3cfg_file, :kind_of => String, :default => "/root/.s3cfg"
-attribute :proxy_conf, :kind_of => String, :default => "/var/opt/opscode/nginx/etc/nginx.d/riak-proxy.conf"
+attribute :proxy_conf, :kind_of => String, :default => "/etc/nginx/conf.d/riak-proxy.conf"
 
 attribute :riak_ip, :kind_of => String, :default => "127.0.0.1"
 attribute :riak_port, :kind_of => Fixnum, :default => 8087
