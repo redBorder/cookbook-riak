@@ -2,7 +2,7 @@
 # Resource:: config_riakcs
 #
 
-actions :install, :config_solo, :config, :remove, :create_user, :set_proxy, :create_buckets
+actions :install, :config_solo, :config, :remove, :create_user, :create_user_solo :set_proxy, :set_proxy_solo, :create_buckets
 
 attribute :user, :kind_of => String, :default => "riakcs"
 attribute :group, :kind_of => String, :default => "riak"
