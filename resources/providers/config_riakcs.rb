@@ -234,9 +234,8 @@ action :set_proxy do
         group "root"
         mode 0644
         retries 2
-        variables(:hostname => node["hostname"], :riakcs_ip => riakcs_ip, :riakcs_port => riakcs_port, :cdomain => cdomain)
-        #notifies :restart, "service[nginx]", :delayed # TODO when nginx service is created
-        notifies :run, "execute[nginx_restart]", :delayed
+        variables(:riakcs_ip => riakcs_ip, :riakcs_port => riakcs_port, :cdomain => cdomain)
+        notifies :restart, "service[nginx]"
     end
 
     execute "nginx_restart" do
@@ -257,7 +256,6 @@ action :set_proxy_solo do
     riakcs_port = new_resource.riakcs_port
     # Get some init configurations
     init_conf = YAML.load_file("/etc/redborder/rb_init_conf.yml")
-    hostname = init_conf['hostname']
     cdomain = init_conf['cdomain']
 
     template "#{proxy_conf}" do
@@ -266,7 +264,7 @@ action :set_proxy_solo do
         group "root"
         mode 0644
         retries 2
-        variables(:hostname => hostname, :riakcs_ip => riakcs_ip, :riakcs_port => riakcs_port, :cdomain => cdomain)
+        variables(:riakcs_ip => riakcs_ip, :riakcs_port => riakcs_port, :cdomain => cdomain)
         notifies :restart, "service[nginx]"
     end
 
