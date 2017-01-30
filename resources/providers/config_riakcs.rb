@@ -32,16 +32,12 @@ action :config_solo do
     stanchion_ip = new_resource.stanchion_ip
     stanchion_port = new_resource.stanchion_port
 
+    s3_access = new_resource.s3_access
+    s3_secret = new_resource.s3_secret
+
     # Get some init configurations
     init_conf = YAML.load_file("/etc/redborder/rb_init_conf.yml")
     cdomain = init_conf['cdomain']
-
-    # Get S3 keys
-    s3_init_conf = YAML.load_file("/etc/redborder/s3_init_conf.yml")
-    s3_conf = s3_init_conf['s3']
-
-    s3_access = s3_conf['access_key']
-    s3_secret = s3_conf['secret_key']
 
     user user do
       group group
@@ -161,17 +157,21 @@ action :create_user do
   begin
     s3cfg_file = new_resource.s3cfg_file
 
-    # Load keys from s3_secrets data bag
-    s3_secrets = Chef::DataBagItem.load("passwords", "s3_secrets") rescue s3_secrets = {}
+    s3_init_conf = YAML.load_file("/etc/redborder/s3_init_conf.yml")
+    s3_endpoint = s3_init_conf['endpoint']
+    s3_location = s3_init_conf['location']
 
-    #if ((!File.exists?("/etc/redborder/s3user.txt") or !s3_secrets["key_created"] ) and File.exists?("/var/run/stanchion/stanchion.pid") and File.exists?("/var/run/riak-cs/riak-cs.pid"))
     execute "create_s3_user" do
-      command "ruby /usr/lib/redborder/bin/rb_s3_user.rb -a" #Create admin user
+      command "ruby /usr/lib/redborder/bin/rb_s3_user.rb" #Create admin user
       ignore_failure true
-      not_if { ::File.exists?("/etc/redborder/s3user.txt") or !s3_secrets["key_created"]}
+      not_if { File.exist?("/etc/redborder/s3user.txt") }
       action :run
-      #notifies :run, "execute[force_chef_client_wakeup]", :delayed
     end
+
+    #Get access_key and secret_key
+    s3_config = Chef::JSONCompat.parse(File.read('/etc/redborder/s3user.txt'))
+    s3_access = s3_config['key_id']
+    s3_secret = s3_config['key_secret']
 
     template "#{s3cfg_file}" do
         source "s3cfg.erb"
@@ -179,39 +179,14 @@ action :create_user do
         group "root"
         mode 0600
         retries 2
-        variables(:key_hostname => s3_secrets["hostname"], :key_location => s3_secrets["location"], :key_id => s3_secrets['key_id'], :key_secret => s3_secrets['key_secret'])
+        variables(:s3_endpoint => s3_endpoint, :s3_location => s3_location, :s3_access => s3_access, :s3_secret => s3_secret)
     end
 
-  rescue => e
-    Chef::Log.error(e.message)
-  end
-end
-
-action :create_user_solo do
-  begin
-    s3cfg_file = new_resource.s3cfg_file
-
-    # Get S3 keys
-    s3_init_conf = YAML.load_file("/etc/redborder/s3_init_conf.yml")
-    s3_conf = s3_init_conf['s3']
-
-    s3_access = s3_conf['access_key']
-    s3_secret = s3_conf['secret_key']
-    s3_endpoint = s3_conf['endpoint']
-    s3_location = s3_conf['location'].nil? ? "US" : s3_conf['location']
-
-    execute "create_s3_user" do
-      command "ruby /usr/lib/redborder/bin/rb_s3_user.rb -a" #Create admin user
-      ignore_failure true
-      not_if { ::File.exists?("/etc/redborder/s3user.txt") or !s3_secrets["key_created"]}
-      action :run
-    end
-
-    template "#{s3cfg_file}" do
-        source "s3cfg.erb"
+    template "/etc/redborder/s3_init_conf.yml" do
+        source "s3_init_conf.yml.erb"
         owner "root"
         group "root"
-        mode 0600
+        mode 0644
         retries 2
         variables(:s3_endpoint => s3_endpoint, :s3_location => s3_location, :s3_access => s3_access, :s3_secret => s3_secret)
     end
