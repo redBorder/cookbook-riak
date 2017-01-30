@@ -57,6 +57,8 @@ end
 
 riak_config_riakcs "Riak-cs create user" do
   s3cfg_file node["riak-cs"]["s3cfg_file"]
+  s3_endpoint s3_init_conf['endpoint']
+  s3_location s3_init_conf['location']
   action :create_user
 end
 
