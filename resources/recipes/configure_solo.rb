@@ -9,10 +9,6 @@
 
 # Get S3 information
 s3_init_conf = YAML.load_file("/etc/redborder/s3_init_conf.yml")
-s3_access = s3_init_conf['access_key']
-s3_secret = s3_init_conf['secret_key']
-s3_endpoint = s3_init_conf['endpoint']
-s3_location = s3_init_conf['location']
 
 nginx_config "config" do
   action :add_solo
@@ -57,7 +53,6 @@ end
 
 riak_config_riakcs "Riak-cs create user" do
   s3cfg_file node["riak-cs"]["s3cfg_file"]
-  s3_endpoint s3_init_conf['endpoint']
   s3_location s3_init_conf['location']
   action :create_user
 end

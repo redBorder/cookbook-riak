@@ -156,8 +156,9 @@ end
 action :create_user do
   begin
     s3cfg_file = new_resource.s3cfg_file
-    s3_endpoint = new_resource.s3_endpoint
     s3_location = new_resource.s3_location
+    init_conf = YAML.load_file("/etc/redborder/rb_init_conf.yml")
+    cdomain = init_conf['cdomain']
 
     execute "create_s3_user" do
       command "rb_s3_user" #Create admin user
@@ -177,7 +178,7 @@ action :create_user do
         group "root"
         mode 0600
         retries 2
-        variables(:s3_endpoint => s3_endpoint, :s3_location => s3_location, :s3_access => s3_access, :s3_secret => s3_secret)
+        variables(:s3_endpoint => cdomain, :s3_location => s3_location, :s3_access => s3_access, :s3_secret => s3_secret)
     end
 
     template "/etc/redborder/s3_init_conf.yml" do
@@ -186,7 +187,7 @@ action :create_user do
         group "root"
         mode 0644
         retries 2
-        variables(:s3_endpoint => s3_endpoint, :s3_location => s3_location, :s3_access => s3_access, :s3_secret => s3_secret)
+        variables(:s3_endpoint => cdomain, :s3_location => s3_location, :s3_access => s3_access, :s3_secret => s3_secret)
     end
 
   rescue => e
