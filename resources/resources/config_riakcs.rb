@@ -2,7 +2,7 @@
 # Resource:: config_riakcs
 #
 
-actions :install, :config_solo, :config, :remove, :create_user, :create_user_solo, :set_proxy, :set_proxy_solo, :create_buckets
+actions :install, :config_solo, :config, :remove, :create_user, :set_proxy, :set_proxy_solo, :create_buckets
 
 attribute :user, :kind_of => String, :default => "riakcs"
 attribute :group, :kind_of => String, :default => "riak"
@@ -19,3 +19,6 @@ attribute :stanchion_ip, :kind_of => String, :default => "127.0.0.1"
 attribute :stanchion_port, :kind_of => Fixnum, :default => 8085
 
 attribute :cdomain, :kind_of => String, :default => "redborder.cluster"
+
+attribute :s3_access, :kind_of => String, :default => "admin-key"
+attribute :s3_secret, :kind_of => String, :default => "admin-secret"
