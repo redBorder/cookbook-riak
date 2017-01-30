@@ -178,7 +178,7 @@ action :create_user do
         group "root"
         mode 0600
         retries 2
-        variables(:s3_endpoint => cdomain, :s3_location => s3_location, :s3_access => s3_access, :s3_secret => s3_secret)
+        variables(:cdomain => cdomain, :s3_location => s3_location, :s3_access => s3_access, :s3_secret => s3_secret)
     end
 
     template "/etc/redborder/s3_init_conf.yml" do
@@ -187,7 +187,7 @@ action :create_user do
         group "root"
         mode 0644
         retries 2
-        variables(:s3_endpoint => cdomain, :s3_location => s3_location, :s3_access => s3_access, :s3_secret => s3_secret)
+        variables(:cdomain => cdomain, :s3_location => s3_location, :s3_access => s3_access, :s3_secret => s3_secret)
     end
 
   rescue => e
