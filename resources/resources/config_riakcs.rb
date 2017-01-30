@@ -22,3 +22,5 @@ attribute :cdomain, :kind_of => String, :default => "redborder.cluster"
 
 attribute :s3_access, :kind_of => String, :default => "admin-key"
 attribute :s3_secret, :kind_of => String, :default => "admin-secret"
+attribute :s3_endpoint, :kind_of => String, :default => "127.0.0.1"
+attribute :s3_location, :kind_of => String, :default => "US"
