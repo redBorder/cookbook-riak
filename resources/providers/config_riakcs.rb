@@ -156,16 +156,18 @@ end
 action :create_user do
   begin
     s3cfg_file = new_resource.s3cfg_file
+    s3_endpoint = new_resource.s3_endpoint
+    s3_location = new_resource.s3_location
 
     execute "create_s3_user" do
-      command "ruby /usr/lib/redborder/bin/rb_s3_user.rb" #Create admin user
+      command "rb_s3_user" #Create admin user
       ignore_failure true
-      not_if { File.exist?("/etc/redborder/s3user.txt") }
+      not_if { ::File.exist?("/etc/redborder/s3user.txt") }
       action :run
     end
 
     #Get access_key and secret_key
-    s3_config = Chef::JSONCompat.parse(File.read('/etc/redborder/s3user.txt'))
+    s3_config = Chef::JSONCompat.parse(::File.read('/etc/redborder/s3user.txt'))
     s3_access = s3_config['key_id']
     s3_secret = s3_config['key_secret']
 
