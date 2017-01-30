@@ -1,9 +1,9 @@
 [default]
 access_key = <%= @s3_access %>
 secret_key = <%= @s3_secret %>
-host_base = <%= @s3_endpoint %>
+host_base = s3.<%= @cdomain %>
 bucket_location = <%= @s3_location %>
-host_bucket = %(bucket)s.<%= @s3_endpoint %>
+host_bucket = %(bucket)s.s3.<%= @cdomain %>
 access_token =
 add_encoding_exts =
 add_headers =
