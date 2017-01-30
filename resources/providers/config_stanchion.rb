@@ -19,10 +19,8 @@ action :config_solo do
     stanchion_ip = new_resource.stanchion_ip
     stanchion_port = new_resource.stanchion_port
 
-    # Get S3 keys
-    s3_init_conf = YAML.load_file("/etc/redborder/s3_init_conf.yml")
-    s3_access = s3_init_conf['access_key']
-    s3_secret = s3_init_conf['secret_key']
+    s3_access = new_resource.s3_access
+    s3_secret = new_resource.s3_secret
 
     yum_package "stanchion" do
       action :upgrade
@@ -51,7 +49,7 @@ action :config_solo do
       supports :status => true, :reload => true, :restart => true, :start => true, :enable => true
       action [:enable,:start]
     end
-    
+
     Chef::Log.info("Riak-cs cookbook has been processed")
   rescue => e
     Chef::Log.error(e.message)

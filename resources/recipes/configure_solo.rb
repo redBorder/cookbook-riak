@@ -27,18 +27,6 @@ riak_config_riak "Riak config" do
   action :config
 end
 
-riak_config_stanchion "stanchion config" do
-  config_dir node["stanchion"]["config_dir"]
-  logdir node["stanchion"]["logdir"]
-  riak_ip node["riak"]["ip"]
-  riak_port node["riak"]["port"]
-  riakcs_ip node["riak-cs"]["ip"]
-  riakcs_port node["riak-cs"]["port"]
-  stanchion_ip node["stanchion"]["ip"]
-  stanchion_port node["stanchion"]["port"]
-  action :config_solo
-end
-
 riak_config_riakcs "Riak-cs config" do
   config_dir node["riak-cs"]["config_dir"]
   logdir node["riak-cs"]["logdir"]
@@ -48,6 +36,22 @@ riak_config_riakcs "Riak-cs config" do
   riakcs_port node["riak-cs"]["port"]
   stanchion_ip node["stanchion"]["ip"]
   stanchion_port node["stanchion"]["port"]
+  s3_access s3_init_conf['access_key']
+  s3_secret s3_init_conf['secret_key']
+  action :config_solo
+end
+
+riak_config_stanchion "stanchion config" do
+  config_dir node["stanchion"]["config_dir"]
+  logdir node["stanchion"]["logdir"]
+  riak_ip node["riak"]["ip"]
+  riak_port node["riak"]["port"]
+  riakcs_ip node["riak-cs"]["ip"]
+  riakcs_port node["riak-cs"]["port"]
+  stanchion_ip node["stanchion"]["ip"]
+  stanchion_port node["stanchion"]["port"]
+  s3_access s3_init_conf['access_key']
+  s3_secret s3_init_conf['secret_key']
   action :config_solo
 end
 

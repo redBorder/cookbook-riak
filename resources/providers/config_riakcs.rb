@@ -157,10 +157,6 @@ action :create_user do
   begin
     s3cfg_file = new_resource.s3cfg_file
 
-    s3_init_conf = YAML.load_file("/etc/redborder/s3_init_conf.yml")
-    s3_endpoint = s3_init_conf['endpoint']
-    s3_location = s3_init_conf['location']
-
     execute "create_s3_user" do
       command "ruby /usr/lib/redborder/bin/rb_s3_user.rb" #Create admin user
       ignore_failure true
