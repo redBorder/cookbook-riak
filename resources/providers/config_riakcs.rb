@@ -2,19 +2,6 @@
 # Provider:: config_riakcs
 #
 
-action :install do
-  begin
-    yum_package "riak-cs" do
-      action :upgrade
-      flush_cache [ :before ]
-    end
-
-    Chef::Log.info("Riak-cs has been installed correctly.")
-  rescue => e
-    Chef::Log.error(e.message)
-  end
-end
-
 action :config do
   begin
 
@@ -37,18 +24,14 @@ action :config do
 
     cdomain = new_resource.cdomain
 
-    user user do
-      group group
-      action :create
-    end
-
     template "#{config_dir}/riak-cs.conf" do
       source "riak-cs.conf.erb"
       owner user
       group group
       mode 0644
       retries 2
-      notifies :restart, "service[riak-cs]", :delayed
+      cookbook "riak"
+      notifies :restart, "service[riak-cs]"
       variables(:riakcs_ip => riakcs_ip, :riakcs_port => riakcs_port, :riak_ip => riak_ip, \
         :riak_port => riak_port, :stanchion_ip => stanchion_ip, :stanchion_port => stanchion_port, \
         :cdomain => cdomain, :s3_access => s3_access, :s3_secret => s3_secret)
@@ -57,7 +40,7 @@ action :config do
     service "riak-cs" do
       service_name "riak-cs"
       supports :status => true, :reload => true, :restart => true, :start => true, :enable => true
-      action [:enable,:start]
+      action [:enable,:restart]
     end
 
     Chef::Log.info("Riak-cs cookbook has been processed")
@@ -82,39 +65,58 @@ end
 
 action :create_user do
   begin
-    s3cfg_file = new_resource.s3cfg_file
-    cdomain = new_resource.cdomain
-
     execute "create_s3_user" do
-      command "rb_s3_user" #Create admin user
-      ignore_failure true
+      command "riak-cs ping && rb_s3_user" #Create admin user
       not_if { ::File.exist?("/etc/redborder/s3user.json") }
+      retries 20
       action :run
     end
 
-    #Get access_key and secret_key
-    s3_user = Chef::JSONCompat.parse(::File.read('/etc/redborder/s3user.json'))
-    s3_access = s3_user['key_id']
-    s3_secret = s3_user['key_secret']
+    Chef::Log.info("riak-cs user created")
+  rescue => e
+    Chef::Log.error(e.message)
+  end
+end
 
-    template "#{s3cfg_file}" do
-        source "s3cfg.erb"
-        owner "root"
-        group "root"
-        mode 0600
-        retries 2
-        variables(:cdomain => cdomain, :s3_access => s3_access, :s3_secret => s3_secret)
+action :configure_s3cmd do
+  begin
+    s3cfg_file = new_resource.s3cfg_file
+    cdomain = new_resource.cdomain
+
+    #Try get access_key and secret_key from data bag
+    s3_keys = data_bag_item("passwords","s3") rescue s3_keys = {}
+
+    if s3_keys.empty?
+      #Try get access_key and secret_key from s3user.json file generated in the leader S3 node
+      s3_keys = Chef::JSONCompat.parse(::File.read('/etc/redborder/s3user.json')) rescue s3_keys = {}
+      if s3_keys.empty?
+        raise "Impossible to configure s3cmd. S3 keys not found"
+      else
+        s3_access = s3_keys['key_id']
+        s3_secret = s3_keys['key_secret']
+
+        template "#{s3cfg_file}" do
+            source "s3cfg.erb"
+            owner "root"
+            group "root"
+            mode 0600
+            retries 2
+            cookbook "riak"
+            variables(:cdomain => cdomain, :s3_access => s3_access, :s3_secret => s3_secret)
+        end
+
+        template "/etc/profile.d/s3.sh" do
+            source "s3.sh.erb"
+            owner "root"
+            group "root"
+            mode 0644
+            retries 2
+            cookbook "riak"
+        end
+
+        Chef::Log.info("s3cmd configured")
+      end
     end
-
-    #template "/etc/redborder/s3_init_conf.yml" do
-    #    source "s3_init_conf.yml.erb"
-    #    owner "root"
-    #    group "root"
-    #    mode 0644
-    #    retries 2
-    #    variables(:cdomain => cdomain, :s3_access => s3_access, :s3_secret => s3_secret)
-    #end
-
   rescue => e
     Chef::Log.error(e.message)
   end
@@ -133,8 +135,9 @@ action :set_proxy do
         group "root"
         mode 0644
         retries 2
+        cookbook "riak"
         variables(:riakcs_ip => riakcs_ip, :riakcs_port => riakcs_port, :cdomain => cdomain)
-        notifies :restart, "service[nginx]"
+        notifies :reload, "service[nginx]", :immediately
     end
 
     service "nginx" do

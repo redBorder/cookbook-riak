@@ -1,4 +1,4 @@
-# Cookbook Name:: riak
+ # Cookbook Name:: riak
 # Provider:: config_riak
 #
 
@@ -12,26 +12,13 @@ action :config do
     riak_port = new_resource.riak_port
     riak_port_http = new_resource.riak_port_http
 
-    yum_package "riak" do
-      action :upgrade
-      flush_cache [ :before ]
-    end
-
-    group group do
-      action  :create
-    end
-
-    user user do
-      group group
-      action :create
-    end
-
     template "#{config_dir}/riak.conf" do
       source "riak.conf.erb"
       owner user
       group group
       mode 0644
       retries 2
+      cookbook "riak"
       variables(:riak_ip => riak_ip, :riak_port => riak_port, :riak_port_http => riak_port_http, :logdir => logdir)
     end
 
@@ -41,12 +28,8 @@ action :config do
        group group
        mode 0644
        retries 2
+       cookbook "riak"
        variables(:riakcs_version => node["riak-cs"]["version"])
-    end
-
-    # riak-cs must have installed before start riak. Then we call to riak-cs resource
-    riak_config_riakcs "riak-cs install" do
-      action :install
     end
 
     service "riak" do

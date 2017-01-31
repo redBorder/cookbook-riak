@@ -22,22 +22,13 @@ action :config do
     s3_access = new_resource.s3_access
     s3_secret = new_resource.s3_secret
 
-    yum_package "stanchion" do
-      action :upgrade
-      flush_cache [ :before ]
-    end
-
-    user user do
-      group group
-      action :create
-    end
-
     template "#{config_dir}/stanchion.conf" do
       source "stanchion.conf.erb"
       owner user
       group group
       mode 0644
       retries 2
+      cookbook "riak"
       notifies :restart, "service[stanchion]", :delayed
       variables(:stanchion_ip => stanchion_ip, :stanchion_port => stanchion_port, \
         :riakcs_ip => riakcs_ip, :riakcs_port => riakcs_port, :riak_ip => riak_ip, :riak_port => riak_port, \
