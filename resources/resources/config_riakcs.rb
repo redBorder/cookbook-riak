@@ -2,7 +2,7 @@
 # Resource:: config_riakcs
 #
 
-actions :install, :config_solo, :config, :remove, :create_user, :set_proxy, :set_proxy_solo, :create_buckets
+actions :install, :config, :remove, :create_user, :set_proxy, :create_buckets
 
 attribute :user, :kind_of => String, :default => "riakcs"
 attribute :group, :kind_of => String, :default => "riak"
@@ -22,5 +22,3 @@ attribute :cdomain, :kind_of => String, :default => "redborder.cluster"
 
 attribute :s3_access, :kind_of => String, :default => "admin-key"
 attribute :s3_secret, :kind_of => String, :default => "admin-secret"
-attribute :s3_endpoint, :kind_of => String, :default => "127.0.0.1"
-attribute :s3_location, :kind_of => String, :default => "US"
