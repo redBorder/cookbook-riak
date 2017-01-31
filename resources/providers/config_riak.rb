@@ -63,32 +63,13 @@ end
 
 action :remove do
   begin
-    config_dir = new_resource.config_dir
-    logdir = new_resource.logdir
 
     service "riak" do
-      supports :stop => true
-      action :stop
+      supports :stop => true, :disable => true
+      action [:stop, :disable]
     end
 
-    dir_list = [
-                 config_dir,
-                 logdir
-               ]
-
-    # removing directories
-    dir_list.each do |dirs|
-      directory dirs do
-        action :delete
-        recursive true
-      end
-    end
-
-    yum_package 'riak' do
-      action :remove
-    end
-
-    Chef::Log.info("Riak has been uninstalled correctly.")
+    Chef::Log.info("Riak is disabled")
   rescue => e
     Chef::Log.error(e.message)
   end
