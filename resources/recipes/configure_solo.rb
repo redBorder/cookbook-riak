@@ -45,8 +45,8 @@ riak_config_riakcs "Riak-cs config" do
   riakcs_port node["riak-cs"]["port"]
   stanchion_ip node["stanchion"]["ip"]
   stanchion_port node["stanchion"]["port"]
-  s3_access s3_init_conf['access_key']
-  s3_secret s3_init_conf['secret_key']
+  s3_access s3_user['access_key']
+  s3_secret s3_user['secret_key']
   cdomain cdomain
   action :config
 end
@@ -61,14 +61,13 @@ riak_config_stanchion "stanchion config" do
   riakcs_port node["riak-cs"]["port"]
   stanchion_ip node["stanchion"]["ip"]
   stanchion_port node["stanchion"]["port"]
-  s3_access s3_init_conf['access_key']
-  s3_secret s3_init_conf['secret_key']
+  s3_access s3_user['access_key']
+  s3_secret s3_user['secret_key']
   action :config
 end
 
 riak_config_riakcs "Riak-cs create user" do
   s3cfg_file node["riak-cs"]["s3cfg_file"]
-  s3_location s3_init_conf['location']
   cdomain cdomain
   action :create_user
 end
@@ -90,8 +89,8 @@ riak_config_riakcs "Riak-cs config" do
   riakcs_port node["riak-cs"]["port"]
   stanchion_ip node["stanchion"]["ip"]
   stanchion_port node["stanchion"]["port"]
-  s3_access s3_init_conf['access_key']
-  s3_secret s3_init_conf['secret_key']
+  s3_access s3_user['access_key']
+  s3_secret s3_user['secret_key']
   cdomain cdomain
   action :config
 end
@@ -106,8 +105,8 @@ riak_config_stanchion "stanchion config" do
   riakcs_port node["riak-cs"]["port"]
   stanchion_ip node["stanchion"]["ip"]
   stanchion_port node["stanchion"]["port"]
-  s3_access s3_init_conf['access_key']
-  s3_secret s3_init_conf['secret_key']
+  s3_access s3_user['access_key']
+  s3_secret s3_user['secret_key']
   action :config
 end
 
