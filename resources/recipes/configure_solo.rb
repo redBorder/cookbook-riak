@@ -7,15 +7,11 @@
 # AFFERO GENERAL PUBLIC LICENSE V3
 #
 
-##########################
-## Must be called twice ##
-##########################
-
 # Get stored S3 information
 begin
   s3_user = Chef::JSONCompat.parse(::File.read('/etc/redborder/s3user.json'))
 rescue
-  s3_user = {"access_key" => "admin-key", "secret_key" => "admin-secret"}
+  s3_user = {"key_id" => "admin-key", "key_secret" => "admin-secret"}
 end
 
 # Get some init configurations
@@ -45,8 +41,8 @@ riak_config_riakcs "Riak-cs config" do
   riakcs_port node["riak-cs"]["port"]
   stanchion_ip node["stanchion"]["ip"]
   stanchion_port node["stanchion"]["port"]
-  s3_access s3_user['access_key']
-  s3_secret s3_user['secret_key']
+  s3_access s3_user['key_id']
+  s3_secret s3_user['key_secret']
   cdomain cdomain
   action :config
 end
@@ -61,8 +57,8 @@ riak_config_stanchion "stanchion config" do
   riakcs_port node["riak-cs"]["port"]
   stanchion_ip node["stanchion"]["ip"]
   stanchion_port node["stanchion"]["port"]
-  s3_access s3_user['access_key']
-  s3_secret s3_user['secret_key']
+  s3_access s3_user['key_id']
+  s3_secret s3_user['key_secret']
   action :config
 end
 
@@ -76,7 +72,7 @@ end
 begin
   s3_user = Chef::JSONCompat.parse(::File.read('/etc/redborder/s3user.json'))
 rescue
-  s3_user = {"access_key" => "admin-key", "secret_key" => "admin-secret"}
+  s3_user = {"key_id" => "admin-key", "key_secret" => "admin-secret"}
 end
 
 # Second time is called s3_access & s3_secret has the new user values
@@ -89,8 +85,8 @@ riak_config_riakcs "Riak-cs config" do
   riakcs_port node["riak-cs"]["port"]
   stanchion_ip node["stanchion"]["ip"]
   stanchion_port node["stanchion"]["port"]
-  s3_access s3_user['access_key']
-  s3_secret s3_user['secret_key']
+  s3_access s3_user['key_id']
+  s3_secret s3_user['key_secret']
   cdomain cdomain
   action :config
 end
@@ -105,8 +101,8 @@ riak_config_stanchion "stanchion config" do
   riakcs_port node["riak-cs"]["port"]
   stanchion_ip node["stanchion"]["ip"]
   stanchion_port node["stanchion"]["port"]
-  s3_access s3_user['access_key']
-  s3_secret s3_user['secret_key']
+  s3_access s3_user['key_id']
+  s3_secret s3_user['key_secret']
   action :config
 end
 
