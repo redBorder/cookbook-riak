@@ -1,9 +1,9 @@
 [default]
 access_key = <%= @s3_access %>
 secret_key = <%= @s3_secret %>
-host_base = s3.<%= @cdomain %>
+host_base = s3.<%= @cdomain %>:8088
 bucket_location = US
-host_bucket = %(bucket)s.s3.<%= @cdomain %>
+host_bucket = %(bucket)s.s3.<%= @cdomain %>:8088
 access_token =
 add_encoding_exts =
 add_headers =
@@ -46,7 +46,7 @@ simpledb_host = sdb.amazonaws.com
 skip_existing = False
 socket_timeout = 300
 urlencoding_mode = normal
-use_https = True
+use_https = False
 verbosity = WARNING
 website_endpoint = http://%(bucket)s.s3-website-%(location)s.amazonaws.com/
 website_error =
