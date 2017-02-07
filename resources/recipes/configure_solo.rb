@@ -6,7 +6,6 @@
 #
 # AFFERO GENERAL PUBLIC LICENSE V3
 #
-
 # Get stored S3 information
 begin
   s3_user = Chef::JSONCompat.parse(::File.read('/etc/redborder/s3user.json'))
@@ -45,7 +44,7 @@ riak_config_riakcs "Riak-cs config" do
   s3_access s3_user['key_id']
   s3_secret s3_user['key_secret']
   cdomain cdomain
-  action :config
+  action :config_default
 end
 
 # First time is called s3_access & s3_secret has default values
@@ -61,7 +60,7 @@ riak_config_stanchion "stanchion config" do
   stanchion_port node["stanchion"]["port"]
   s3_access s3_user['key_id']
   s3_secret s3_user['key_secret']
-  action :config
+  action :config_default
 end
 
 riak_config_riakcs "Riak-cs create user" do
