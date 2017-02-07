@@ -65,7 +65,7 @@ end
 riak_config_riakcs "Riak-cs create user" do
   s3cfg_file node["riak-cs"]["s3cfg_file"]
   cdomain cdomain
-  action :create_user
+  action [:create_user, :configure_s3cmd]
 end
 
 # Get stored S3 information (again)

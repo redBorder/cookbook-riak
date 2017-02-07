@@ -2,7 +2,7 @@
 # Resource:: config_riakcs
 #
 
-actions :install, :config, :remove, :create_user, :set_proxy, :create_buckets
+actions :install, :config, :remove, :create_user, :configure_s3cmd, :set_proxy, :create_buckets
 
 attribute :user, :kind_of => String, :default => "riakcs"
 attribute :group, :kind_of => String, :default => "riak"

@@ -92,6 +92,13 @@ action :create_user do
       action :run
     end
 
+    Chef::Log.info("riak-cs user created")
+  rescue => e
+    Chef::Log.error(e.message)
+  end
+end
+
+action :configure_s3cmd do
     #Get access_key and secret_key
     s3_user = Chef::JSONCompat.parse(::File.read('/etc/redborder/s3user.json'))
     s3_access = s3_user['key_id']
@@ -106,15 +113,7 @@ action :create_user do
         variables(:cdomain => cdomain, :s3_access => s3_access, :s3_secret => s3_secret)
     end
 
-    #template "/etc/redborder/s3_init_conf.yml" do
-    #    source "s3_init_conf.yml.erb"
-    #    owner "root"
-    #    group "root"
-    #    mode 0644
-    #    retries 2
-    #    variables(:cdomain => cdomain, :s3_access => s3_access, :s3_secret => s3_secret)
-    #end
-
+    Chef::Log.info("s3cmd configured")
   rescue => e
     Chef::Log.error(e.message)
   end
