@@ -99,6 +99,7 @@ action :create_user do
 end
 
 action :configure_s3cmd do
+  begin
     #Get access_key and secret_key
     s3_user = Chef::JSONCompat.parse(::File.read('/etc/redborder/s3user.json'))
     s3_access = s3_user['key_id']
