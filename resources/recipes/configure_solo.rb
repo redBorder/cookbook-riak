@@ -63,12 +63,12 @@ riak_config_stanchion "stanchion config" do
 end
 
 riak_config_riakcs "Riak-cs create user" do
-  s3cfg_file node["riak-cs"]["s3cfg_file"]
-  cdomain cdomain
   action :create_user
 end
 
 riak_config_riakcs "Riak-cs configure s3cmd" do
+  s3cfg_file node["riak-cs"]["s3cfg_file"]
+  cdomain cdomain
   action :configure_s3cmd
 end
 

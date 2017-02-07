@@ -82,9 +82,6 @@ end
 
 action :create_user do
   begin
-    s3cfg_file = new_resource.s3cfg_file
-    cdomain = new_resource.cdomain
-
     execute "create_s3_user" do
       command "rb_s3_user" #Create admin user
       ignore_failure true
@@ -100,6 +97,9 @@ end
 
 action :configure_s3cmd do
   begin
+    s3cfg_file = new_resource.s3cfg_file
+    cdomain = new_resource.cdomain
+
     #Get access_key and secret_key
     s3_user = Chef::JSONCompat.parse(::File.read('/etc/redborder/s3user.json'))
     s3_access = s3_user['key_id']
