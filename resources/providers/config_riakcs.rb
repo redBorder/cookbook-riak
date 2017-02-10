@@ -165,6 +165,14 @@ action :configure_s3cmd do
         variables(:cdomain => cdomain, :s3_access => s3_access, :s3_secret => s3_secret)
     end
 
+    template "/etc/profile.d/s3.sh" do
+        source "s3.sh.erb"
+        owner "root"
+        group "root"
+        mode 0644
+        retries 2
+    end
+
     Chef::Log.info("s3cmd configured")
   rescue => e
     Chef::Log.error(e.message)
