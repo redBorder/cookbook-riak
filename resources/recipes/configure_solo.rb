@@ -11,9 +11,9 @@
 init_conf = YAML.load_file("/etc/redborder/rb_init_conf.yml")
 cdomain = init_conf['cdomain']
 
-#nginx_config "config" do
-#  action :add_solo
-#end
+nginx_config "config" do
+  action :add_solo
+end
 
 riak_config_riak "Riak config" do
   config_dir node["riak"]["config_dir"]

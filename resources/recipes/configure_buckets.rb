@@ -17,13 +17,13 @@ riak_config_riakcs "Riak-cs configure s3cmd" do
   action :configure_s3cmd
 end
 
-#riak_config_riakcs "Riak-cs set proxy" do
-#  proxy_conf node["riak-cs"]["proxy_conf"]
-#  riakcs_ip node["riak-cs"]["ip"]
-#  riakcs_port node["riak-cs"]["port"]
-#  cdomain cdomain
-#  action :set_proxy
-#end
+riak_config_riakcs "Riak-cs set proxy" do
+  proxy_conf node["riak-cs"]["proxy_conf"]
+  riakcs_ip node["riak-cs"]["ip"]
+  riakcs_port node["riak-cs"]["port"]
+  cdomain cdomain
+  action :set_proxy
+end
 
 riak_config_riakcs "Riak-cs create buckets" do
   action :create_buckets
