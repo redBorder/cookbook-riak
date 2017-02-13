@@ -142,7 +142,7 @@ action :set_proxy do
         mode 0644
         retries 2
         variables(:riakcs_ip => riakcs_ip, :riakcs_port => riakcs_port, :cdomain => cdomain)
-        notifies :restart, "service[nginx]"
+        notifies :reload, "service[nginx]", :immediately
     end
 
     service "nginx" do

@@ -8,4 +8,5 @@
 #
 
 include_recipe 'riak::configure_solo'
+#include_recipe 'riak::configure_solo'
 include_recipe 'riak::configure_buckets'
