@@ -7,6 +7,5 @@
 # AFFERO GENERAL PUBLIC LICENSE V3
 #
 
-include_recipe 'riak::configure_solo_default'
 include_recipe 'riak::configure_solo'
 include_recipe 'riak::configure_buckets'
