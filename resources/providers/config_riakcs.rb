@@ -57,7 +57,7 @@ action :config do
     service "riak-cs" do
       service_name "riak-cs"
       supports :status => true, :reload => true, :restart => true, :start => true, :enable => true
-      action [:enable,:start]
+      action [:enable,:restart]
     end
 
     Chef::Log.info("Riak-cs cookbook has been processed")
