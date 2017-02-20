@@ -2,7 +2,7 @@
 # Resource:: config_stanchion
 #
 
-actions :install, :config, :config_default, :remove
+actions :config, :config_default, :remove
 
 attribute :user, :kind_of => String, :default => "stanchion"
 attribute :group, :kind_of => String, :default => "riak"

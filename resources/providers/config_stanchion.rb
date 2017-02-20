@@ -2,19 +2,6 @@
 # Provider:: config_stanchion
 #
 
-action :install do
-  begin
-    yum_package "stanchion" do
-      action :upgrade
-      flush_cache [ :before ]
-    end
-
-    Chef::Log.info("Stanchion has been installed correctly.")
-  rescue => e
-    Chef::Log.error(e.message)
-  end
-end
-
 action :config do
   begin
 

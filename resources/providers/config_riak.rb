@@ -12,7 +12,7 @@ action :config do
     riak_port = new_resource.riak_port
     riak_port_http = new_resource.riak_port_http
 
-    yum_package "riak" do
+    yum_package "redborder-riak" do
       action :upgrade
       flush_cache [ :before ]
     end
@@ -42,11 +42,6 @@ action :config do
        mode 0644
        retries 2
        variables(:riakcs_version => node["riak-cs"]["version"])
-    end
-
-    # riak-cs must have installed before start riak. Then we call to riak-cs resource
-    riak_config_riakcs "riak-cs install" do
-      action :install
     end
 
     service "riak" do

@@ -47,10 +47,6 @@ riak_config_riakcs "Riak-cs config" do
   action :config
 end
 
-riak_config_stanchion "stanchion install" do
-  action :install
-end
-
 # First time is called s3_access & s3_secret has default values
 riak_config_stanchion "stanchion config" do
   config_dir node["stanchion"]["config_dir"]
