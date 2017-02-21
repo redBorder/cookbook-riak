@@ -72,7 +72,7 @@ action :create_user do
     execute "create_s3_user" do
       command "riak-cs ping && rb_s3_user" #Create admin user
       not_if { ::File.exist?("/etc/redborder/s3user.json") }
-      retries 5
+      retries 20
       action :run
     end
 
