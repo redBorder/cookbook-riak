@@ -72,7 +72,7 @@ action :create_user do
     execute "create_s3_user" do
       command "rb_s3_user" #Create admin user
       not_if { ::File.exist?("/etc/redborder/s3user.json") }
-      retry_delay
+      retries 5
       action :run
     end
 
