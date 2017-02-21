@@ -71,8 +71,8 @@ action :create_user do
   begin
     execute "create_s3_user" do
       command "rb_s3_user" #Create admin user
-      ignore_failure true
       not_if { ::File.exist?("/etc/redborder/s3user.json") }
+      retry_delay
       action :run
     end
 
