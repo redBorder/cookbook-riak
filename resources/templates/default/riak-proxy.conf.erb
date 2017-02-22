@@ -8,7 +8,7 @@ server {
   ssl_ciphers RSA:HIGH:MEDIUM:!LOW:!kEDH:!aNULL:!ADH:!eNULL:!EXP:!SSLv2:!SEED:!CAMELLIA:!PSK;
   ssl_prefer_server_ciphers on;
 
-  server_name redborder.s3.<%= @cdomain %> rbookshelf.s3.<%= @cdomain %> s3.<%= @cdomain %>;
+  server_name redborder.s3.service.<%= @cdomain %> rbookshelf.s3.service.<%= @cdomain %> s3.service.<%= @cdomain %>;
   access_log /var/log/nginx/access-s3.log;
 
   location / {
