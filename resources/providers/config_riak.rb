@@ -1,4 +1,4 @@
-# Cookbook Name:: riak
+ # Cookbook Name:: riak
 # Provider:: config_riak
 #
 
@@ -11,20 +11,6 @@ action :config do
     riak_ip = new_resource.riak_ip
     riak_port = new_resource.riak_port
     riak_port_http = new_resource.riak_port_http
-
-    yum_package "redborder-riak" do
-      action :upgrade
-      flush_cache [ :before ]
-    end
-
-    group group do
-      action  :create
-    end
-
-    user user do
-      group group
-      action :create
-    end
 
     template "#{config_dir}/riak.conf" do
       source "riak.conf.erb"

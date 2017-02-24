@@ -24,11 +24,6 @@ action :config do
 
     cdomain = new_resource.cdomain
 
-    user user do
-      group group
-      action :create
-    end
-
     template "#{config_dir}/riak-cs.conf" do
       source "riak-cs.conf.erb"
       owner user
@@ -87,29 +82,37 @@ action :configure_s3cmd do
     s3cfg_file = new_resource.s3cfg_file
     cdomain = new_resource.cdomain
 
-    #Get access_key and secret_key
-    s3_user = Chef::JSONCompat.parse(::File.read('/etc/redborder/s3user.json'))
-    s3_access = s3_user['key_id']
-    s3_secret = s3_user['key_secret']
+    #Try get access_key and secret_key from data bag
+    s3_keys = data_bag_item("passwords","s3") rescue s3_keys = {}
 
-    template "#{s3cfg_file}" do
-        source "s3cfg.erb"
-        owner "root"
-        group "root"
-        mode 0600
-        retries 2
-        variables(:cdomain => cdomain, :s3_access => s3_access, :s3_secret => s3_secret)
-    end
+    if s3_keys.empty?
+      #Try get access_key and secret_key from s3user.json file generated in the leader S3 node
+      s3_keys = Chef::JSONCompat.parse(::File.read('/etc/redborder/s3user.json')) rescue s3_keys = {}
+      if s3_keys.empty?
+        raise "Impossible to configure s3cmd. S3 keys not found"
+      else
+        s3_access = s3_keys['key_id']
+        s3_secret = s3_keys['key_secret']
 
-    template "/etc/profile.d/s3.sh" do
-        source "s3.sh.erb"
-        owner "root"
-        group "root"
-        mode 0644
-        retries 2
-    end
+        template "#{s3cfg_file}" do
+            source "s3cfg.erb"
+            owner "root"
+            group "root"
+            mode 0600
+            retries 2
+            variables(:cdomain => cdomain, :s3_access => s3_access, :s3_secret => s3_secret)
+        end
 
-    Chef::Log.info("s3cmd configured")
+        template "/etc/profile.d/s3.sh" do
+            source "s3.sh.erb"
+            owner "root"
+            group "root"
+            mode 0644
+            retries 2
+        end
+
+        Chef::Log.info("s3cmd configured")
+      end
   rescue => e
     Chef::Log.error(e.message)
   end

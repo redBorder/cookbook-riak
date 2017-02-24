@@ -19,7 +19,12 @@ rescue
 end
 
 nginx_config "config" do
-  action :add_solo
+  service_name "s3"
+  action [:add, :configure_certs]
+end
+
+riak_config_commmon "Riak config common" do
+  action :install
 end
 
 riak_config_riak "Riak config" do

@@ -4,7 +4,7 @@
 
 actions :config, :config_default, :remove
 
-attribute :user, :kind_of => String, :default => "stanchion"
+attribute :user, :kind_of => String, :default => "riak"
 attribute :group, :kind_of => String, :default => "riak"
 attribute :config_dir, :kind_of => String, :default => "/etc/stanchion"
 attribute :logdir, :kind_of => String, :default => "/var/log/stanchion"

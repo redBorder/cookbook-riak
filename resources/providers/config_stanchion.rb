@@ -22,11 +22,6 @@ action :config do
     s3_access = new_resource.s3_access
     s3_secret = new_resource.s3_secret
 
-    user user do
-      group group
-      action :create
-    end
-
     template "#{config_dir}/stanchion.conf" do
       source "stanchion.conf.erb"
       owner user
