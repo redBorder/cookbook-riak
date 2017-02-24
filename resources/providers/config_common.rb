@@ -20,6 +20,7 @@ action :install do
 
   rescue => e
     Chef::Log.error(e.message)
+  end
 end
 
 action :add do
@@ -81,19 +82,17 @@ end
 
 action :remove do
   begin
+    riak_config_riak "Stop riak" do
+      action :remove
+    end
 
-  riak_config_riak "Stop riak" do
-    action :remove
-  end
+    riak_config_riakcs "Stop riak-cs" do
+      action :remove
+    end
 
-  riak_config_riakcs "Stop riak-cs" do
-    action :remove
-  end
-
-  riak_config_stanchion "Stop stanchion" do
-    action :remove
-  end
-
+    riak_config_stanchion "Stop stanchion" do
+      action :remove
+    end
   rescue => e
     Chef::Log.error(e.message)
   end

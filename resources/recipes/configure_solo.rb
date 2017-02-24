@@ -23,7 +23,7 @@ nginx_config "config" do
   action [:add, :configure_certs]
 end
 
-riak_config_commmon "Riak config common" do
+riak_config_common "Riak config common" do
   action :install
 end
 

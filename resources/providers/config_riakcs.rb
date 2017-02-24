@@ -113,6 +113,7 @@ action :configure_s3cmd do
 
         Chef::Log.info("s3cmd configured")
       end
+    end
   rescue => e
     Chef::Log.error(e.message)
   end
