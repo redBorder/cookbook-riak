@@ -28,6 +28,7 @@ action :config do
       group group
       mode 0644
       retries 2
+      cookbook "riak"
       notifies :restart, "service[stanchion]", :delayed
       variables(:stanchion_ip => stanchion_ip, :stanchion_port => stanchion_port, \
         :riakcs_ip => riakcs_ip, :riakcs_port => riakcs_port, :riak_ip => riak_ip, :riak_port => riak_port, \

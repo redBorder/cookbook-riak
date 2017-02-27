@@ -18,6 +18,7 @@ action :config do
       group group
       mode 0644
       retries 2
+      cookbook "riak"
       variables(:riak_ip => riak_ip, :riak_port => riak_port, :riak_port_http => riak_port_http, :logdir => logdir)
     end
 
@@ -27,6 +28,7 @@ action :config do
        group group
        mode 0644
        retries 2
+       cookbook "riak"
        variables(:riakcs_version => node["riak-cs"]["version"])
     end
 

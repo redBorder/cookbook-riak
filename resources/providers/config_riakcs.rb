@@ -30,6 +30,7 @@ action :config do
       group group
       mode 0644
       retries 2
+      cookbook "riak"
       notifies :restart, "service[riak-cs]"
       variables(:riakcs_ip => riakcs_ip, :riakcs_port => riakcs_port, :riak_ip => riak_ip, \
         :riak_port => riak_port, :stanchion_ip => stanchion_ip, :stanchion_port => stanchion_port, \
@@ -100,6 +101,7 @@ action :configure_s3cmd do
             group "root"
             mode 0600
             retries 2
+            cookbook "riak"
             variables(:cdomain => cdomain, :s3_access => s3_access, :s3_secret => s3_secret)
         end
 
@@ -109,6 +111,7 @@ action :configure_s3cmd do
             group "root"
             mode 0644
             retries 2
+            cookbook "riak"
         end
 
         Chef::Log.info("s3cmd configured")
@@ -132,6 +135,7 @@ action :set_proxy do
         group "root"
         mode 0644
         retries 2
+        cookbook "riak"
         variables(:riakcs_ip => riakcs_ip, :riakcs_port => riakcs_port, :cdomain => cdomain)
         notifies :reload, "service[nginx]", :immediately
     end
