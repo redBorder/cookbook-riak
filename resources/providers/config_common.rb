@@ -3,6 +3,8 @@
 #
 action :install do
   begin
+    user = new_resource.user
+    group = new_resource.group
 
     yum_package "redborder-riak" do
       action :upgrade
