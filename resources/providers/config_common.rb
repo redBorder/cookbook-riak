@@ -6,7 +6,7 @@ action :install do
     user = new_resource.user
     group = new_resource.group
 
-    yum_package "redborder-riak" do
+    dnf_package "redborder-riak" do
       action :upgrade
       flush_cache [ :before ]
     end
