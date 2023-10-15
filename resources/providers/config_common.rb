@@ -11,13 +11,14 @@ action :install do
       flush_cache [ :before ]
     end
 
-    group group do
-      action :create
-    end
+    #group group do
+    #  action :create
+    #end
 
-    user user do
-      group group
-      action :create
+    execute "create_user" do
+      command "/usr/sbin/useradd #{user}"
+      ignore_failure true
+      not_if "getent passwd #{user}"
     end
 
   rescue => e
