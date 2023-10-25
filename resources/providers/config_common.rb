@@ -119,7 +119,7 @@ action :register do
          action :nothing
       end.run_action(:run)
 
-      node.default["s3"]["registered"] = true
+      node.normal["s3"]["registered"] = true
       Chef::Log.info("s3 service has been registered to consul")
     end
   rescue => e
@@ -136,7 +136,7 @@ action :deregister do
         action :nothing
       end.run_action(:run)
 
-      node.default["s3"]["registered"] = false
+      node.normal["s3"]["registered"] = false
       Chef::Log.info("s3 service has been deregistered from consul")
     end
   rescue => e
