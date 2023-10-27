@@ -6,18 +6,19 @@ action :install do
     user = new_resource.user
     group = new_resource.group
 
-    yum_package "redborder-riak" do
+    dnf_package "redborder-riak" do
       action :upgrade
       flush_cache [ :before ]
     end
 
-    group group do
-      action :create
-    end
+    #group group do
+    #  action :create
+    #end
 
-    user user do
-      group group
-      action :create
+    execute "create_user" do
+      command "/usr/sbin/useradd #{user}"
+      ignore_failure true
+      not_if "getent passwd #{user}"
     end
 
   rescue => e
@@ -118,7 +119,7 @@ action :register do
          action :nothing
       end.run_action(:run)
 
-      node.set["s3"]["registered"] = true
+      node.normal["s3"]["registered"] = true
       Chef::Log.info("s3 service has been registered to consul")
     end
   rescue => e
@@ -135,7 +136,7 @@ action :deregister do
         action :nothing
       end.run_action(:run)
 
-      node.set["s3"]["registered"] = false
+      node.normal["s3"]["registered"] = false
       Chef::Log.info("s3 service has been deregistered from consul")
     end
   rescue => e
